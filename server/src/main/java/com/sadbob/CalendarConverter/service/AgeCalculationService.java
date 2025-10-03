@@ -7,23 +7,30 @@ import com.sadbob.CalendarConverter.exception.ValidationException;
 import com.sadbob.CalendarConverter.util.CalendarType;
 import com.sadbob.CalendarConverter.util.EthiopianDateConverter;
 import com.sadbob.CalendarConverter.util.HijriDateConverter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-@Slf4j
+
 @Service
-@RequiredArgsConstructor
 public class AgeCalculationService {
+
+    private static final Logger log = LoggerFactory.getLogger(AgeCalculationService.class);
+
 
     private final EthiopianDateConverter ethiopianConverter;
     private final HijriDateConverter hijriConverter;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public AgeCalculationService(EthiopianDateConverter ethiopianConverter, HijriDateConverter hijriConverter) {
+        this.ethiopianConverter = ethiopianConverter;
+        this.hijriConverter = hijriConverter;
+    }
 
     public AgeResponse calculateAge(String calendarType, String birthDate) {
         try {

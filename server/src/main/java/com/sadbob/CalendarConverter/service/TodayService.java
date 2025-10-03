@@ -12,15 +12,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class TodayService {
 
     private final EthiopianDateConverter ethiopianConverter;
     private final HijriDateConverter hijriConverter;
+    private final DateTimeFormatter dateFormatter;
+    private final DateTimeFormatter displayFormatter;
 
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
-
+    public TodayService(EthiopianDateConverter ethiopianConverter, HijriDateConverter hijriConverter) {
+        this.ethiopianConverter = ethiopianConverter;
+        this.hijriConverter = hijriConverter;
+        this.dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        this.displayFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+    }
     public TodayResponse getTodayInAllCalendars() {
         LocalDate today = LocalDate.now();
 

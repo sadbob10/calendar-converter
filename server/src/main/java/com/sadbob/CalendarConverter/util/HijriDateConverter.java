@@ -1,14 +1,17 @@
 package com.sadbob.CalendarConverter.util;
 
 import com.sadbob.CalendarConverter.exception.ConversionException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-@Slf4j
+
 @Component
 public class HijriDateConverter {
+
+    private static final Logger log = LoggerFactory.getLogger(HijriDateConverter.class);
 
     // Simple conversion constants (consider using a library like Umm al-Qura)
     private static final double HIJRI_TO_GREGORIAN_RATIO = 0.970224;

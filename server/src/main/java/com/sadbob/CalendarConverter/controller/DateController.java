@@ -11,13 +11,11 @@ import com.sadbob.CalendarConverter.service.TodayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/dates")
-@RequiredArgsConstructor
 @Tag(name = "Date Converter", description = "Calendar date conversion APIs")
 @CrossOrigin(origins = "*")
 public class DateController {
@@ -25,6 +23,14 @@ public class DateController {
     private final DateConversionService dateConversionService;
     private final AgeCalculationService ageCalculationService;
     private final TodayService todayService;
+
+    public DateController(DateConversionService dateConversionService,
+                          AgeCalculationService ageCalculationService,
+                          TodayService todayService) {
+        this.dateConversionService = dateConversionService;
+        this.ageCalculationService = ageCalculationService;
+        this.todayService = todayService;
+    }
 
     @PostMapping("/convert")
     @Operation(summary = "Convert date between calendars")

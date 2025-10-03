@@ -6,7 +6,8 @@ import com.sadbob.CalendarConverter.util.CalendarType;
 import com.sadbob.CalendarConverter.util.EthiopianDateConverter;
 import com.sadbob.CalendarConverter.util.HijriDateConverter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,16 +15,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class DateConversionService {
+
+    private static final Logger log = LoggerFactory.getLogger(DateConversionService.class);
+
 
     private final EthiopianDateConverter ethiopianConverter;
     private final HijriDateConverter hijriConverter;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+
+    public DateConversionService(EthiopianDateConverter ethiopianConverter, HijriDateConverter hijriConverter) {
+        this.ethiopianConverter = ethiopianConverter;
+        this.hijriConverter = hijriConverter;
+    }
 
     public ConversionResponse convertDate(String calendarType, String date) {
         try {

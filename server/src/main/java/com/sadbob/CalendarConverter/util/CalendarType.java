@@ -1,9 +1,5 @@
 package com.sadbob.CalendarConverter.util;
 
-
-import lombok.Getter;
-
-@Getter
 public enum CalendarType {
     GREGORIAN("greg"),
     ETHIOPIAN("eth"),
@@ -13,6 +9,10 @@ public enum CalendarType {
 
     CalendarType(String code) {
         this.code = code;
+    }
+
+    public String getCode() {
+        return this.code;
     }
 
     public static CalendarType fromCode(String code) {

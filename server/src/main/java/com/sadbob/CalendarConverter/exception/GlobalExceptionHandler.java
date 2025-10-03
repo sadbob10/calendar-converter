@@ -3,20 +3,21 @@ package com.sadbob.CalendarConverter.exception;
 import com.sadbob.CalendarConverter.dto.responseDTO.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ConversionException.class)
     public ResponseEntity<ErrorResponse> handleConversionException(
@@ -24,12 +25,13 @@ public class GlobalExceptionHandler {
 
         log.warn("Conversion error: {} - Path: {}", ex.getMessage(), request.getRequestURI());
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .path(request.getRequestURI())
-                .errorCode(ex.getErrorCode())
-                .message(ex.getMessage())
-                .status(ex.getStatus())
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                ex.getErrorCode(),
+                ex.getMessage(),
+                ex.getStatus(),
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
@@ -40,12 +42,13 @@ public class GlobalExceptionHandler {
 
         log.warn("Validation error: {} - Path: {}", ex.getMessage(), request.getRequestURI());
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .path(request.getRequestURI())
-                .errorCode(ex.getErrorCode())
-                .message(ex.getMessage())
-                .status(ex.getStatus())
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                ex.getErrorCode(),
+                ex.getMessage(),
+                ex.getStatus(),
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
@@ -62,12 +65,13 @@ public class GlobalExceptionHandler {
 
         log.warn("Validation error: {} - Path: {}", errorMessage, request.getRequestURI());
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .path(request.getRequestURI())
-                .errorCode("VALIDATION_ERROR")
-                .message("Invalid request parameters: " + errorMessage)
-                .status(HttpStatus.BAD_REQUEST)
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                "VALIDATION_ERROR",
+                "Invalid request parameters: " + errorMessage,
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -83,12 +87,13 @@ public class GlobalExceptionHandler {
 
         log.warn("Constraint violation: {} - Path: {}", errorMessage, request.getRequestURI());
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .path(request.getRequestURI())
-                .errorCode("CONSTRAINT_VIOLATION")
-                .message("Constraint violation: " + errorMessage)
-                .status(HttpStatus.BAD_REQUEST)
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                "CONSTRAINT_VIOLATION",
+                "Constraint violation: " + errorMessage,
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -99,12 +104,13 @@ public class GlobalExceptionHandler {
 
         log.error("Application error: {} - Path: {}", ex.getMessage(), request.getRequestURI(), ex);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .path(request.getRequestURI())
-                .errorCode(ex.getErrorCode())
-                .message(ex.getMessage())
-                .status(ex.getStatus())
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                ex.getErrorCode(),
+                ex.getMessage(),
+                ex.getStatus(),
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
@@ -115,12 +121,13 @@ public class GlobalExceptionHandler {
 
         log.error("Unexpected error: {} - Path: {}", ex.getMessage(), request.getRequestURI(), ex);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .path(request.getRequestURI())
-                .errorCode("INTERNAL_ERROR")
-                .message("An unexpected error occurred")
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                "INTERNAL_ERROR",
+                "An unexpected error occurred",
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -131,12 +138,13 @@ public class GlobalExceptionHandler {
 
         log.warn("Illegal argument: {} - Path: {}", ex.getMessage(), request.getRequestURI());
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .path(request.getRequestURI())
-                .errorCode("INVALID_INPUT")
-                .message(ex.getMessage())
-                .status(HttpStatus.BAD_REQUEST)
-                .build();
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                "INVALID_INPUT",
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()
+        );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
