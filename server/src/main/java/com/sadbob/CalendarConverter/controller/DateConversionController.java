@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/dates")
 @Tag(name = "Date Converter", description = "Calendar date conversion APIs")
 @CrossOrigin(origins = "*")
-public class DateController {
+public class DateConversionController {
 
     private final DateConversionService dateConversionService;
     private final AgeCalculationService ageCalculationService;
     private final TodayService todayService;
 
-    public DateController(DateConversionService dateConversionService,
-                          AgeCalculationService ageCalculationService,
-                          TodayService todayService) {
+    public DateConversionController(DateConversionService dateConversionService,
+                                    AgeCalculationService ageCalculationService,
+                                    TodayService todayService) {
         this.dateConversionService = dateConversionService;
         this.ageCalculationService = ageCalculationService;
         this.todayService = todayService;

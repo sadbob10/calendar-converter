@@ -1,62 +1,50 @@
 package com.sadbob.CalendarConverter.util;
 
-import com.sadbob.CalendarConverter.exception.ConversionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 
 @Component
 public class EthiopianDateConverter {
 
-    private static final Logger log = LoggerFactory.getLogger(EthiopianDateConverter.class);
-
-    // Ethiopian calendar constants
-    private static final int ETHIOPIAN_YEAR_OFFSET = 8;
-    private static final int ETHIOPIAN_MONTH_OFFSET = 9;
-    private static final int DAYS_IN_ETHIOPIAN_MONTH = 30;
-
     public EthiopianDate toEthiopian(int gregorianYear, int gregorianMonth, int gregorianDay) {
-        try {
+        LocalDate gregorianDate = LocalDate.of(gregorianYear, gregorianMonth, gregorianDay);
 
-            int ethiopianYear = gregorianYear - ETHIOPIAN_YEAR_OFFSET;
-            if (gregorianMonth <= ETHIOPIAN_MONTH_OFFSET) {
-                ethiopianYear--;
-            }
-
-            int ethiopianMonth = (gregorianMonth + 3) % 12;
-            if (ethiopianMonth == 0) ethiopianMonth = 12;
-
-            int ethiopianDay = Math.min(gregorianDay, DAYS_IN_ETHIOPIAN_MONTH);
-
-            return new EthiopianDate(ethiopianYear, ethiopianMonth, ethiopianDay);
-        } catch (Exception e) {
-            log.error("Error converting Gregorian to Ethiopian date: {}-{}-{}",
-                    gregorianYear, gregorianMonth, gregorianDay, e);
-            throw new ConversionException("Invalid Gregorian date format or value", e);
+        int ethiopianYear = gregorianYear - 7;
+        if (gregorianMonth < 9 || (gregorianMonth == 9 && gregorianDay < 11)) {
+            ethiopianYear--;
         }
+
+        LocalDate newYear = LocalDate.of(gregorianYear, 9, 11);
+        if (gregorianYear % 4 == 3) { // leap year adjustment
+            newYear = LocalDate.of(gregorianYear, 9, 12);
+        }
+
+        long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(newYear, gregorianDate);
+        if (daysBetween < 0) {
+            newYear = newYear.minusYears(1);
+            daysBetween = java.time.temporal.ChronoUnit.DAYS.between(newYear, gregorianDate);
+            ethiopianYear--;
+        }
+
+        int ethiopianMonth = (int) (daysBetween / 30) + 1;
+        int ethiopianDay = (int) (daysBetween % 30) + 1;
+
+        return new EthiopianDate(ethiopianYear, ethiopianMonth, ethiopianDay);
     }
 
-    public LocalDate toGregorian(int ethiopianYear, int ethiopianMonth, int ethiopianDay) {
-        try {
-            // Simple conversion logic
-            int gregorianYear = ethiopianYear + ETHIOPIAN_YEAR_OFFSET;
-            if (ethiopianMonth <= 4) {
-                gregorianYear++;
-            }
-
-            int gregorianMonth = (ethiopianMonth + 8) % 12;
-            if (gregorianMonth == 0) gregorianMonth = 12;
-
-            return LocalDate.of(gregorianYear, gregorianMonth,
-                    Math.min(ethiopianDay, LocalDate.of(gregorianYear, gregorianMonth, 1).lengthOfMonth()));
-
-        } catch (Exception e) {
-            log.error("Error converting Ethiopian to Gregorian date: {}-{}-{}",
-                    ethiopianYear, ethiopianMonth, ethiopianDay, e);
-            throw new ConversionException("Invalid Ethiopian date format or value", e);
+    // 👇 ADD THIS: Ethiopian → Gregorian
+    public LocalDate toGregorian(int ethYear, int ethMonth, int ethDay) {
+        // Ethiopian new year in Gregorian
+        int gregorianYear = ethYear + 8;
+        LocalDate newYear = LocalDate.of(gregorianYear, 9, 11);
+        if (gregorianYear % 4 == 3) {
+            newYear = LocalDate.of(gregorianYear, 9, 12);
         }
+
+        // Days since Ethiopian New Year
+        int daysSinceNewYear = (ethMonth - 1) * 30 + (ethDay - 1);
+
+        return newYear.plusDays(daysSinceNewYear);
     }
 
     public record EthiopianDate(int year, int month, int day) {}
