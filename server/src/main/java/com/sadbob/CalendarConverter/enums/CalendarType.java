@@ -1,4 +1,4 @@
-package com.sadbob.CalendarConverter.util;
+package com.sadbob.CalendarConverter.enums;
 
 public enum CalendarType {
     GREGORIAN("greg"),

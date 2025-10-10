@@ -1,5 +1,7 @@
 package com.sadbob.CalendarConverter.util;
 
+import com.sadbob.CalendarConverter.enums.CalendarType;
+
 /**
  * Safe helper class for calendar type conversions
  * Does not modify existing CalendarType enum - zero risk to existing code

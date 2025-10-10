@@ -115,6 +115,59 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
 
+    // NEW EXCEPTION HANDLERS - Add these to your existing class
+
+    @ExceptionHandler(CalendarNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCalendarNotFoundException(
+            CalendarNotFoundException ex, HttpServletRequest request) {
+
+        log.warn("Calendar not found: {} - Path: {}", ex.getMessage(), request.getRequestURI());
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                "CALENDAR_NOT_FOUND",
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND,
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidDateException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidDateException(
+            InvalidDateException ex, HttpServletRequest request) {
+
+        log.warn("Invalid date: {} - Path: {}", ex.getMessage(), request.getRequestURI());
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                "INVALID_DATE",
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CalendarServiceException.class)
+    public ResponseEntity<ErrorResponse> handleCalendarServiceException(
+            CalendarServiceException ex, HttpServletRequest request) {
+
+        log.error("Calendar service error: {} - Path: {}", ex.getMessage(), request.getRequestURI(), ex);
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                request.getRequestURI(),
+                "CALENDAR_SERVICE_ERROR",
+                ex.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex, HttpServletRequest request) {

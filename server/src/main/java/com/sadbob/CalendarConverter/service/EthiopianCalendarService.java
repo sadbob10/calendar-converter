@@ -3,7 +3,7 @@ package com.sadbob.CalendarConverter.service;
 import com.sadbob.CalendarConverter.dto.responseDTO.CalendarDayResponse;
 import com.sadbob.CalendarConverter.dto.responseDTO.CalendarResponse;
 import com.sadbob.CalendarConverter.dto.responseDTO.CalendarWeekResponse;
-import com.sadbob.CalendarConverter.util.CalendarType;
+import com.sadbob.CalendarConverter.enums.CalendarType;
 import com.sadbob.CalendarConverter.util.EthiopianDateConverter;
 import org.springframework.stereotype.Service;
 

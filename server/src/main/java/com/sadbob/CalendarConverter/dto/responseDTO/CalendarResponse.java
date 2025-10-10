@@ -1,6 +1,6 @@
 package com.sadbob.CalendarConverter.dto.responseDTO;
 
-import com.sadbob.CalendarConverter.util.CalendarType;
+import com.sadbob.CalendarConverter.enums.CalendarType;
 import java.util.List;
 
 public class CalendarResponse {

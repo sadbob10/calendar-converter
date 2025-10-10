@@ -4,7 +4,7 @@ package com.sadbob.CalendarConverter.service;
 import com.sadbob.CalendarConverter.dto.responseDTO.AgeResponse;
 import com.sadbob.CalendarConverter.exception.ConversionException;
 import com.sadbob.CalendarConverter.exception.ValidationException;
-import com.sadbob.CalendarConverter.util.CalendarType;
+import com.sadbob.CalendarConverter.enums.CalendarType;
 import com.sadbob.CalendarConverter.util.EthiopianDateConverter;
 import com.sadbob.CalendarConverter.util.HijriDateConverter;
 import org.slf4j.Logger;
