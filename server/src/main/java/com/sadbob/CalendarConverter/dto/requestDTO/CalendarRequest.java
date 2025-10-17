@@ -17,7 +17,6 @@ public class CalendarRequest {
     @Max(value = 13, message = "Month cannot exceed 13")
     private Integer month; // Allow null for current month
 
-    // Constructors, getters, setters remain the same
     public CalendarRequest() {}
 
     public CalendarRequest(Integer year, Integer month) {

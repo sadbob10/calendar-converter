@@ -19,20 +19,27 @@ public class DateConversionService {
 
     private static final Logger log = LoggerFactory.getLogger(DateConversionService.class);
 
-
     private final EthiopianDateConverter ethiopianConverter;
     private final HijriDateConverter hijriConverter;
+    private final DateValidationService dateValidationService;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
 
-    public DateConversionService(EthiopianDateConverter ethiopianConverter, HijriDateConverter hijriConverter) {
+    // Updated constructor to include DateValidationService
+    public DateConversionService(EthiopianDateConverter ethiopianConverter,
+                                 HijriDateConverter hijriConverter,
+                                 DateValidationService dateValidationService) {
         this.ethiopianConverter = ethiopianConverter;
         this.hijriConverter = hijriConverter;
+        this.dateValidationService = dateValidationService;
     }
 
     public ConversionResponse convertDate(String calendarType, String date) {
         try {
+            // Validate the input date before processing
+            dateValidationService.validateDate(date, calendarType);
+
             String[] parts = date.split("-");
             int year = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
@@ -110,12 +117,43 @@ public class DateConversionService {
     }
 
     private String formatEthiopianDate(String date) {
-        // Add Ethiopian month names if needed
-        return date + " (Ethiopian)";
+        try {
+            // Parse and format Ethiopian date with proper month names
+            String[] parts = date.split("-");
+            int year = Integer.parseInt(parts[0]);
+            int month = Integer.parseInt(parts[1]);
+            int day = Integer.parseInt(parts[2]);
+
+            String[] ethiopianMonths = {
+                    "Mäskäräm", "Ṭiqimt", "Ḫidar", "Taḫśaś", "Ṭirr", "Yäkatit",
+                    "Mägabit", "Miyazya", "Gənbot", "Säne", "Ḥamle", "Nähäse", "Ṗagume"
+            };
+
+            String monthName = (month >= 1 && month <= 13) ? ethiopianMonths[month - 1] : "Unknown";
+            return String.format("%s %d, %d (Ethiopian)", monthName, day, year);
+        } catch (Exception e) {
+            return date + " (Ethiopian)";
+        }
     }
 
     private String formatHijriDate(String date) {
-        // Add Hijri month names if needed
-        return date + " (Hijri)";
+        try {
+            // Parse and format Hijri date with proper month names
+            String[] parts = date.split("-");
+            int year = Integer.parseInt(parts[0]);
+            int month = Integer.parseInt(parts[1]);
+            int day = Integer.parseInt(parts[2]);
+
+            String[] hijriMonths = {
+                    "Muḥarram", "Ṣafar", "Rabīʿ al-Awwal", "Rabīʿ al-Thānī",
+                    "Jumādā al-Ūlā", "Jumādā al-Thāniya", "Rajab", "Shaʿbān",
+                    "Ramaḍān", "Shawwāl", "Dhū al-Qaʿda", "Dhū al-Ḥijja"
+            };
+
+            String monthName = (month >= 1 && month <= 12) ? hijriMonths[month - 1] : "Unknown";
+            return String.format("%s %d, %d (Hijri)", monthName, day, year);
+        } catch (Exception e) {
+            return date + " (Hijri)";
+        }
     }
 }
