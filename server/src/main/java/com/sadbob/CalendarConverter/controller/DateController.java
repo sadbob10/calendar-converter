@@ -60,4 +60,15 @@ public class DateController {
     public ResponseEntity<String> healthCheck() {
         return ResponseEntity.ok("Calendar Converter API is running");
     }
+
+
+    @PostMapping("/convert/single")
+    @Operation(summary = "Convert single date (alternative endpoint)")
+    public ResponseEntity<ConversionResponse> convertSingleDate(
+            @Valid @RequestBody DateConversionRequest request) {
+        // Your existing single conversion logic
+        ConversionResponse response = dateConversionService.convertDate(
+                request.calendarType(), request.date());
+        return ResponseEntity.ok(response);
+    }
 }
