@@ -60,12 +60,14 @@ public class BulkConversionService {
                     request.getDate()
             );
 
-            // Extract the specific target calendar conversion
-            String targetDate = conversionResponse.conversions().get(request.getTargetCalendar());
-            String formattedDate = conversionResponse.formattedDates().get(request.getTargetCalendar());
+            // FIX: Map request calendar codes to response keys
+            String targetCalendarKey = mapToResponseKey(request.getTargetCalendar());
+            String targetDate = conversionResponse.conversions().get(targetCalendarKey);
+            String formattedDate = conversionResponse.formattedDates().get(targetCalendarKey);
 
             if (targetDate == null) {
-                throw new IllegalArgumentException("Target calendar not found: " + request.getTargetCalendar());
+                throw new IllegalArgumentException("Target calendar '" + request.getTargetCalendar() +
+                        "' not found. Available: " + conversionResponse.conversions().keySet());
             }
 
             return new BulkConversionResponse.SingleConversionResult(
@@ -92,6 +94,16 @@ public class BulkConversionService {
                     e.getMessage()
             );
         }
+    }
+
+    // Add this mapping method
+    private String mapToResponseKey(String calendarCode) {
+        return switch (calendarCode.toLowerCase()) {
+            case "greg" -> "gregorian";
+            case "eth" -> "ethiopian";
+            case "hijri" -> "hijri";
+            default -> calendarCode.toLowerCase();
+        };
     }
 
     // Async version for better performance with large batches
