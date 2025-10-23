@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -22,21 +24,27 @@ public class DateConversionService {
     private final EthiopianDateConverter ethiopianConverter;
     private final HijriDateConverter hijriConverter;
     private final DateValidationService dateValidationService;
+    private final HolidayService holidayService;
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
 
-    // Updated constructor to include DateValidationService
+    // Constructor-based injection
     public DateConversionService(EthiopianDateConverter ethiopianConverter,
                                  HijriDateConverter hijriConverter,
-                                 DateValidationService dateValidationService) {
+                                 DateValidationService dateValidationService,
+                                 HolidayService holidayService) {
         this.ethiopianConverter = ethiopianConverter;
         this.hijriConverter = hijriConverter;
         this.dateValidationService = dateValidationService;
+        this.holidayService = holidayService;
     }
 
     public ConversionResponse convertDate(String calendarType, String date) {
         try {
+            // Get holiday information for source date
+            List<String> sourceHolidays = holidayService.getHolidayNamesForDate(calendarType, date);
+
             // Validate the input date before processing
             dateValidationService.validateDate(date, calendarType);
 
@@ -83,11 +91,26 @@ public class DateConversionService {
                 }
             }
 
+            // Build target calendar list
+            List<String> targetCalendars = new ArrayList<>(conversions.keySet());
+            targetCalendars.remove(calendarType);
+
+            // Get holiday info for target calendars
+            List<String> allTargetHolidays = new ArrayList<>();
+            for (String targetCal : targetCalendars) {
+                String targetDate = conversions.get(targetCal);
+                List<String> targetHols = holidayService.getHolidayNamesForDate(targetCal, targetDate);
+                allTargetHolidays.addAll(targetHols);
+            }
+
             return new ConversionResponse(
                     date,
                     sourceCalendar.name().toLowerCase(),
                     conversions,
                     formattedDates,
+                    targetCalendars,
+                    sourceHolidays,
+                    allTargetHolidays,
                     "Date converted successfully"
             );
 
@@ -118,7 +141,6 @@ public class DateConversionService {
 
     private String formatEthiopianDate(String date) {
         try {
-            // Parse and format Ethiopian date with proper month names
             String[] parts = date.split("-");
             int year = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
@@ -128,7 +150,6 @@ public class DateConversionService {
                     "Mäskäräm", "Ṭiqimt", "Ḫidar", "Taḫśaś", "Ṭirr", "Yäkatit",
                     "Mägabit", "Miyazya", "Gənbot", "Säne", "Ḥamle", "Nähäse", "Ṗagume"
             };
-
             String monthName = (month >= 1 && month <= 13) ? ethiopianMonths[month - 1] : "Unknown";
             return String.format("%s %d, %d (Ethiopian)", monthName, day, year);
         } catch (Exception e) {
@@ -138,7 +159,6 @@ public class DateConversionService {
 
     private String formatHijriDate(String date) {
         try {
-            // Parse and format Hijri date with proper month names
             String[] parts = date.split("-");
             int year = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
@@ -149,7 +169,6 @@ public class DateConversionService {
                     "Jumādā al-Ūlā", "Jumādā al-Thāniya", "Rajab", "Shaʿbān",
                     "Ramaḍān", "Shawwāl", "Dhū al-Qaʿda", "Dhū al-Ḥijja"
             };
-
             String monthName = (month >= 1 && month <= 12) ? hijriMonths[month - 1] : "Unknown";
             return String.format("%s %d, %d (Hijri)", monthName, day, year);
         } catch (Exception e) {
