@@ -77,6 +77,21 @@
 			<version>2.6.0</version>
 		</dependency>
 
+		<!-- iCalendar support -->
+		<dependency>
+			<groupId>org.mnode.ical4j</groupId>
+			<artifactId>ical4j</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+		<!-- PDF Generation -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext7-core</artifactId>
+			<version>8.0.2</version>
+			<type>pom</type>
+		</dependency>
+
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations</artifactId>
