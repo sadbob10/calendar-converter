@@ -1,6 +1,6 @@
 package com.sadbob.CalendarConverter.service;
 
-import com.sadbob.CalendarConverter.dto.responseDTO.TodayResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.TodayResponse;
 import com.sadbob.CalendarConverter.util.EthiopianDateConverter;
 import com.sadbob.CalendarConverter.util.HijriDateConverter;
 import org.springframework.stereotype.Service;

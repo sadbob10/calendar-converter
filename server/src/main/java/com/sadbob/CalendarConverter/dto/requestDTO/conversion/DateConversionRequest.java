@@ -1,4 +1,4 @@
-package com.sadbob.CalendarConverter.dto.requestDTO;
+package com.sadbob.CalendarConverter.dto.requestDTO.conversion;
 
 
 import com.sadbob.CalendarConverter.validation.ValidCalendarType;

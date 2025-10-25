@@ -4,7 +4,7 @@ import com.sadbob.CalendarConverter.dto.responseDTO.holidays.HolidayCheckRespons
 import com.sadbob.CalendarConverter.dto.responseDTO.holidays.HolidayResponse;
 import com.sadbob.CalendarConverter.dto.responseDTO.holidays.MonthHolidaysResponse;
 import com.sadbob.CalendarConverter.entity.Holiday;
-import com.sadbob.CalendarConverter.service.HolidayService;
+import com.sadbob.CalendarConverter.service.interf.HolidayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

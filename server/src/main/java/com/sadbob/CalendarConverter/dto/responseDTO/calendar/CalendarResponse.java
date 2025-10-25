@@ -1,4 +1,4 @@
-package com.sadbob.CalendarConverter.dto.responseDTO;
+package com.sadbob.CalendarConverter.dto.responseDTO.calendar;
 
 import com.sadbob.CalendarConverter.enums.CalendarType;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.sadbob.CalendarConverter.dto.requestDTO;
+package com.sadbob.CalendarConverter.dto.requestDTO.conversion;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

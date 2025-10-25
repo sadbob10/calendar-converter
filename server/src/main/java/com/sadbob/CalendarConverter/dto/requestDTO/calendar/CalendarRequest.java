@@ -1,4 +1,4 @@
-package com.sadbob.CalendarConverter.dto.requestDTO;
+package com.sadbob.CalendarConverter.dto.requestDTO.calendar;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

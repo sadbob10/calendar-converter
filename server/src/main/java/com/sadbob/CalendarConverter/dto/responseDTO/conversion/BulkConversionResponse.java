@@ -1,4 +1,4 @@
-package com.sadbob.CalendarConverter.dto.responseDTO;
+package com.sadbob.CalendarConverter.dto.responseDTO.conversion;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

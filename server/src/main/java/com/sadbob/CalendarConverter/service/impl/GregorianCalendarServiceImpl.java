@@ -1,9 +1,10 @@
-package com.sadbob.CalendarConverter.service;
+package com.sadbob.CalendarConverter.service.impl;
 
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarDayResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarWeekResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarDayResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarWeekResponse;
 import com.sadbob.CalendarConverter.enums.CalendarType;
+import com.sadbob.CalendarConverter.service.interf.CalendarService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GregorianCalendarService implements CalendarService {
+public class GregorianCalendarServiceImpl implements CalendarService {
 
     private static final DateTimeFormatter MONTH_YEAR_FORMATTER = DateTimeFormatter.ofPattern("MMMM yyyy");
     private static final DateTimeFormatter CURRENT_DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, MMMM d");

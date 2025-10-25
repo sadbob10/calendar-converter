@@ -1,8 +1,8 @@
-package com.sadbob.CalendarConverter.service;
+package com.sadbob.CalendarConverter.service.interf;
 
 
 
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarResponse;
 import com.sadbob.CalendarConverter.enums.CalendarType;
 
 public interface CalendarService {

@@ -1,14 +1,14 @@
 package com.sadbob.CalendarConverter.controller;
 
-import com.sadbob.CalendarConverter.dto.requestDTO.CalendarRequest;
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarResponse;
+import com.sadbob.CalendarConverter.dto.requestDTO.calendar.CalendarRequest;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarResponse;
 import com.sadbob.CalendarConverter.exception.CalendarNotFoundException;
 import com.sadbob.CalendarConverter.exception.CalendarServiceException;
 import com.sadbob.CalendarConverter.exception.InvalidDateException;
-import com.sadbob.CalendarConverter.service.CalendarService;
-import com.sadbob.CalendarConverter.service.EthiopianCalendarService;
-import com.sadbob.CalendarConverter.service.GregorianCalendarService;
-import com.sadbob.CalendarConverter.service.HijriCalendarService;
+import com.sadbob.CalendarConverter.service.interf.CalendarService;
+import com.sadbob.CalendarConverter.service.impl.EthiopianCalendarServiceImpl;
+import com.sadbob.CalendarConverter.service.impl.GregorianCalendarServiceImpl;
+import com.sadbob.CalendarConverter.service.impl.HijriCalendarServiceImpl;
 import com.sadbob.CalendarConverter.enums.CalendarType;
 import com.sadbob.CalendarConverter.util.CalendarTypeHelper;
 import com.sadbob.CalendarConverter.util.EthiopianDateConverter;
@@ -40,9 +40,9 @@ public class CalendarController {
     private final HijriDateConverter hijriConverter;
 
     public CalendarController(
-            GregorianCalendarService gregorianService,
-            EthiopianCalendarService ethiopianService,
-            HijriCalendarService hijriService,
+            GregorianCalendarServiceImpl gregorianService,
+            EthiopianCalendarServiceImpl ethiopianService,
+            HijriCalendarServiceImpl hijriService,
             EthiopianDateConverter ethiopianConverter,
             HijriDateConverter hijriConverter) {
 

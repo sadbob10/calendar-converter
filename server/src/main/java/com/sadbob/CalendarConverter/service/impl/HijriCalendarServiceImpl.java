@@ -1,9 +1,11 @@
-package com.sadbob.CalendarConverter.service;
+package com.sadbob.CalendarConverter.service.impl;
 
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarDayResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarWeekResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarDayResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarWeekResponse;
 import com.sadbob.CalendarConverter.enums.CalendarType;
+import com.sadbob.CalendarConverter.service.interf.CalendarService;
+import com.sadbob.CalendarConverter.util.CalendarMonthUtils;
 import com.sadbob.CalendarConverter.util.HijriDateConverter;
 import org.springframework.stereotype.Service;
 
@@ -12,29 +14,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class HijriCalendarService implements CalendarService {
+public class HijriCalendarServiceImpl implements CalendarService {
 
     private final HijriDateConverter hijriConverter;
-
-    private static final String[] HIJRI_MONTHS = {
-            "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani",
-            "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
-            "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
-    };
+    private final CalendarMonthUtils monthUtils;
 
     private static final String[] HIJRI_DAYS = {
             "al-Aḥad", "al-Ithnayn", "al-Thulāthāʾ", "al-Arbiʿāʾ",
             "al-Khamīs", "al-Jumuʿah", "al-Sabt"
     };
 
-    public HijriCalendarService(HijriDateConverter hijriConverter) {
+    public HijriCalendarServiceImpl(HijriDateConverter hijriConverter, CalendarMonthUtils monthUtils) {
         this.hijriConverter = hijriConverter;
+        this.monthUtils = monthUtils;
     }
 
     @Override
     public CalendarResponse getCalendar(int year, int month) {
         List<CalendarWeekResponse> weeks = generateHijriCalendarWeeks(year, month);
-        String monthYear = HIJRI_MONTHS[month - 1] + " " + year;
+        String monthYear = monthUtils.getMonthName(month, "hijri") + " " + year;
         String currentDate = getCurrentHijriDate();
 
         return new CalendarResponse(
@@ -74,22 +72,18 @@ public class HijriCalendarService implements CalendarService {
 
         int daysInMonth = getDaysInHijriMonth(year, month);
 
-        // Calculate first day of the month in Hijri calendar
         LocalDate firstDayGregorian = hijriConverter.toGregorian(year, month, 1);
         int firstDayOfWeek = firstDayGregorian.getDayOfWeek().getValue() % 7;
 
-        // Add previous month's days
         int previousMonthYear = (month == 1) ? year - 1 : year;
         int previousMonth = (month == 1) ? 12 : month - 1;
         int previousMonthDays = getDaysInHijriMonth(previousMonthYear, previousMonth);
 
-        // Fill previous month's days
         for (int i = previousMonthDays - firstDayOfWeek + 1; i <= previousMonthDays; i++) {
             String otherCalendarDate = getGregorianEquivalent(previousMonthYear, previousMonth, i);
             currentDays.add(new CalendarDayResponse(i, String.valueOf(i), false, false, otherCalendarDate));
         }
 
-        // Add current month's days
         for (int day = 1; day <= daysInMonth; day++) {
             boolean isToday = isTodayInHijri(year, month, day);
             String otherCalendarDate = getGregorianEquivalent(year, month, day);
@@ -101,7 +95,6 @@ public class HijriCalendarService implements CalendarService {
             }
         }
 
-        // Add next month's days to complete the week
         int nextMonthYear = (month == 12) ? year + 1 : year;
         int nextMonth = (month == 12) ? 1 : month + 1;
         int nextDay = 1;
@@ -118,8 +111,6 @@ public class HijriCalendarService implements CalendarService {
     }
 
     private int getDaysInHijriMonth(int year, int month) {
-        // Use actual calculation based on Islamic calendar rules
-        // This is simplified - you might want to use a proper Islamic calendar library
         LocalDate firstDay = hijriConverter.toGregorian(year, month, 1);
         LocalDate firstDayNextMonth = hijriConverter.toGregorian(
                 (month == 12) ? year + 1 : year,
@@ -156,7 +147,7 @@ public class HijriCalendarService implements CalendarService {
         return String.format("%s, %d %s %d AH",
                 HIJRI_DAYS[dayOfWeek],
                 hijriDate.day(),
-                HIJRI_MONTHS[hijriDate.month() - 1],
+                monthUtils.getMonthName(hijriDate.month(), "hijri"),
                 hijriDate.year());
     }
 }

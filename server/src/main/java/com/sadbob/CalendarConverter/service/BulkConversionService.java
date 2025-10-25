@@ -1,9 +1,9 @@
 package com.sadbob.CalendarConverter.service;
 
-import com.sadbob.CalendarConverter.dto.requestDTO.BulkConversionRequest;
-import com.sadbob.CalendarConverter.dto.requestDTO.DateRangeRequest;
-import com.sadbob.CalendarConverter.dto.responseDTO.BulkConversionResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.ConversionResponse;
+import com.sadbob.CalendarConverter.dto.requestDTO.conversion.BulkConversionRequest;
+import com.sadbob.CalendarConverter.dto.requestDTO.conversion.DateRangeRequest;
+import com.sadbob.CalendarConverter.dto.responseDTO.conversion.BulkConversionResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.conversion.ConversionResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

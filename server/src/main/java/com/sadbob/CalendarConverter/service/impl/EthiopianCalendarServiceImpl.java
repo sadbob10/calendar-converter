@@ -1,9 +1,11 @@
-package com.sadbob.CalendarConverter.service;
+package com.sadbob.CalendarConverter.service.impl;
 
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarDayResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.CalendarWeekResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarDayResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.CalendarWeekResponse;
 import com.sadbob.CalendarConverter.enums.CalendarType;
+import com.sadbob.CalendarConverter.service.interf.CalendarService;
+import com.sadbob.CalendarConverter.util.CalendarMonthUtils;
 import com.sadbob.CalendarConverter.util.EthiopianDateConverter;
 import org.springframework.stereotype.Service;
 
@@ -12,27 +14,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EthiopianCalendarService implements CalendarService {
+public class EthiopianCalendarServiceImpl implements CalendarService {
 
     private final EthiopianDateConverter ethiopianConverter;
-
-    private static final String[] ETHIOPIAN_MONTHS = {
-            "Meskerem", "Tikimit", "Hidar", "Tahesas", "Tir", "Yekatit",
-            "Megabit", "Miazia", "Genbot", "Sene", "Hamle", "Nehase", "Pagume"
-    };
+    private final CalendarMonthUtils monthUtils;
 
     private static final String[] ETHIOPIAN_DAYS = {
             "እሑድ", "ሰኞ", "ማክሰኞ", "ረቡዕ", "ሐሙስ", "ዓርብ", "ቅዳሜ"
     };
 
-    public EthiopianCalendarService(EthiopianDateConverter ethiopianConverter) {
+    public EthiopianCalendarServiceImpl(EthiopianDateConverter ethiopianConverter, CalendarMonthUtils monthUtils) {
         this.ethiopianConverter = ethiopianConverter;
+        this.monthUtils = monthUtils;
     }
 
     @Override
     public CalendarResponse getCalendar(int year, int month) {
         List<CalendarWeekResponse> weeks = generateEthiopianCalendarWeeks(year, month);
-        String monthYear = ETHIOPIAN_MONTHS[month - 1] + " " + year;
+        String monthYear = monthUtils.getMonthName(month, "ethiopian") + " " + year;
         String currentDate = getCurrentEthiopianDate();
 
         return new CalendarResponse(
@@ -72,22 +71,18 @@ public class EthiopianCalendarService implements CalendarService {
 
         int daysInMonth = getDaysInEthiopianMonth(year, month);
 
-        // Calculate first day of the month in Ethiopian calendar
         LocalDate firstDayGregorian = ethiopianConverter.toGregorian(year, month, 1);
-        int firstDayOfWeek = firstDayGregorian.getDayOfWeek().getValue() % 7; // 0=Sunday, 1=Monday, etc.
+        int firstDayOfWeek = firstDayGregorian.getDayOfWeek().getValue() % 7;
 
-        // Add previous month's days
         int previousMonthYear = (month == 1) ? year - 1 : year;
         int previousMonth = (month == 1) ? 13 : month - 1;
         int previousMonthDays = getDaysInEthiopianMonth(previousMonthYear, previousMonth);
 
-        // Fill previous month's days
         for (int i = previousMonthDays - firstDayOfWeek + 1; i <= previousMonthDays; i++) {
             String otherCalendarDate = getGregorianEquivalent(previousMonthYear, previousMonth, i);
             currentDays.add(new CalendarDayResponse(i, String.valueOf(i), false, false, otherCalendarDate));
         }
 
-        // Add current month's days
         for (int day = 1; day <= daysInMonth; day++) {
             boolean isToday = isTodayInEthiopian(year, month, day);
             String otherCalendarDate = getGregorianEquivalent(year, month, day);
@@ -99,7 +94,6 @@ public class EthiopianCalendarService implements CalendarService {
             }
         }
 
-        // Add next month's days to complete the week
         int nextMonthYear = (month == 13) ? year + 1 : year;
         int nextMonth = (month == 13) ? 1 : month + 1;
         int nextDay = 1;
@@ -117,9 +111,9 @@ public class EthiopianCalendarService implements CalendarService {
 
     private int getDaysInEthiopianMonth(int year, int month) {
         if (month == 13) {
-            return (year % 4 == 3) ? 6 : 5; // Pagume has 6 days in leap year
+            return (year % 4 == 3) ? 6 : 5;
         }
-        return 30; // All other months have 30 days
+        return 30;
     }
 
     private boolean isTodayInEthiopian(int year, int month, int day) {
@@ -149,7 +143,7 @@ public class EthiopianCalendarService implements CalendarService {
         return String.format("%s, %d %s %d",
                 ETHIOPIAN_DAYS[dayOfWeek],
                 ethDate.day(),
-                ETHIOPIAN_MONTHS[ethDate.month() - 1],
+                monthUtils.getMonthName(ethDate.month(), "ethiopian"),
                 ethDate.year());
     }
 }

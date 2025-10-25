@@ -1,4 +1,4 @@
-package com.sadbob.CalendarConverter.service.calenderExport;
+package com.sadbob.CalendarConverter.service;
 
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.DeviceRgb;
@@ -11,28 +11,28 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.sadbob.CalendarConverter.entity.Holiday;
-import com.sadbob.CalendarConverter.service.HolidayService;
+import com.sadbob.CalendarConverter.service.interf.HolidayService;
+import com.sadbob.CalendarConverter.util.CalendarMonthUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.sadbob.CalendarConverter.service.calenderExport.DataExportService.getString;
-
 @Service
 public class PdfExportService {
 
     private final HolidayService holidayService;
+    private final CalendarMonthUtils monthUtils;
 
-    // Colors for styling
     private static final Color HEADER_COLOR = new DeviceRgb(70, 130, 180);
     private static final Color HOLIDAY_COLOR = new DeviceRgb(220, 20, 60);
     private static final Color WEEKEND_COLOR = new DeviceRgb(240, 240, 240);
-    private static final Color TODAY_COLOR = new DeviceRgb(255, 255, 200); // Light yellow for today
+    private static final Color TODAY_COLOR = new DeviceRgb(255, 255, 200);
 
-    public PdfExportService(HolidayService holidayService) {
+    public PdfExportService(HolidayService holidayService, CalendarMonthUtils monthUtils) {
         this.holidayService = holidayService;
+        this.monthUtils = monthUtils;
     }
 
     public byte[] generateSimpleCalendarPdf(String calendarType, int year, int month) {
@@ -41,17 +41,13 @@ public class PdfExportService {
             PdfDocument pdfDoc = new PdfDocument(writer);
             Document document = new Document(pdfDoc);
 
-            // Add title
             addTitle(document, calendarType, year, month);
 
-            // Get holidays
             List<Holiday> holidays = holidayService.getHolidaysForMonth(calendarType, year, month);
 
-            // Create calendar table based on calendar type
             Table calendarTable = createCalendarTable(calendarType, year, month, holidays);
             document.add(calendarTable);
 
-            // Add holidays legend
             addHolidaysLegend(document, holidays);
 
             document.close();
@@ -63,7 +59,7 @@ public class PdfExportService {
     }
 
     private void addTitle(Document document, String calendarType, int year, int month) {
-        String monthName = getMonthName(month, calendarType);
+        String monthName = monthUtils.getMonthName(month, calendarType);
         String title = String.format("%s Calendar - %s %d",
                 calendarType.toUpperCase(), monthName, year);
 
@@ -88,7 +84,6 @@ public class PdfExportService {
         // Add weekday headers
         addWeekdayHeaders(table);
 
-        // Handle different calendar types
         if ("ethiopian".equalsIgnoreCase(calendarType)) {
             createEthiopianCalendar(table, year, month, holidays);
         } else if ("hijri".equalsIgnoreCase(calendarType)) {
@@ -103,22 +98,19 @@ public class PdfExportService {
     private void createGregorianCalendar(Table table, int year, int month, List<Holiday> holidays) {
         LocalDate firstDay = LocalDate.of(year, month, 1);
         int daysInMonth = firstDay.lengthOfMonth();
-        int startDayOfWeek = firstDay.getDayOfWeek().getValue() % 7; // 0=Sunday
+        int startDayOfWeek = firstDay.getDayOfWeek().getValue() % 7;
 
-        // Fill empty cells before first day
         for (int i = 0; i < startDayOfWeek; i++) {
             table.addCell(createEmptyCell());
         }
 
-        // Add days of the month
         LocalDate today = LocalDate.now();
         for (int day = 1; day <= daysInMonth; day++) {
             boolean isToday = (year == today.getYear() && month == today.getMonthValue() && day == today.getDayOfMonth());
             table.addCell(createDayCell(day, holidays, startDayOfWeek + day - 1, isToday));
         }
 
-        // Fill remaining empty cells
-        int totalCells = 42; // 6 weeks
+        int totalCells = 42;
         int filledCells = startDayOfWeek + daysInMonth;
         for (int i = filledCells; i < totalCells; i++) {
             table.addCell(createEmptyCell());
@@ -126,23 +118,17 @@ public class PdfExportService {
     }
 
     private void createEthiopianCalendar(Table table, int year, int month, List<Holiday> holidays) {
-        // Ethiopian months have 30 days, except Pagume (month 13) which has 5-6 days
-        int daysInMonth = (month == 13) ? 6 : 30; // Simplified - always show 6 days for Pagume
+        int daysInMonth = (month == 13) ? 6 : 30;
+        int startDayOfWeek = 0;
 
-        // Simplified start day (in reality, this would need proper Ethiopian date calculation)
-        int startDayOfWeek = 0; // Default to Sunday start
-
-        // Fill empty cells before first day
         for (int i = 0; i < startDayOfWeek; i++) {
             table.addCell(createEmptyCell());
         }
 
-        // Add days of the month
         for (int day = 1; day <= daysInMonth; day++) {
             table.addCell(createDayCell(day, holidays, startDayOfWeek + day - 1, false));
         }
 
-        // Fill remaining empty cells
         int totalCells = 42;
         int filledCells = startDayOfWeek + daysInMonth;
         for (int i = filledCells; i < totalCells; i++) {
@@ -151,21 +137,17 @@ public class PdfExportService {
     }
 
     private void createHijriCalendar(Table table, int year, int month, List<Holiday> holidays) {
-        // Hijri months have 29-30 days - using 30 for simplicity
         int daysInMonth = 30;
-        int startDayOfWeek = 0; // Default to Sunday start
+        int startDayOfWeek = 0;
 
-        // Fill empty cells before first day
         for (int i = 0; i < startDayOfWeek; i++) {
             table.addCell(createEmptyCell());
         }
 
-        // Add days of the month
         for (int day = 1; day <= daysInMonth; day++) {
             table.addCell(createDayCell(day, holidays, startDayOfWeek + day - 1, false));
         }
 
-        // Fill remaining empty cells
         int totalCells = 42;
         int filledCells = startDayOfWeek + daysInMonth;
         for (int i = filledCells; i < totalCells; i++) {
@@ -203,11 +185,9 @@ public class PdfExportService {
                 .setPadding(8)
                 .setTextAlignment(TextAlignment.CENTER);
 
-        // Check if it's a weekend
         int dayOfWeek = cellIndex % 7;
-        boolean isWeekend = (dayOfWeek == 0) || (dayOfWeek == 6); // Sunday or Saturday
+        boolean isWeekend = (dayOfWeek == 0) || (dayOfWeek == 6);
 
-        // Check if it's a holiday
         boolean isHoliday = holidays.stream()
                 .anyMatch(holiday -> holiday.getDayOfMonth() == day);
 
@@ -245,9 +225,5 @@ public class PdfExportService {
                     .setMarginBottom(3);
             document.add(holidayParagraph);
         }
-    }
-
-    private String getMonthName(int month, String calendarType) {
-        return getString(month, calendarType);
     }
 }

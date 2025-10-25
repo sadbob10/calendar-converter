@@ -1,7 +1,7 @@
 package com.sadbob.CalendarConverter.service;
 
 
-import com.sadbob.CalendarConverter.dto.responseDTO.AgeResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.age.AgeResponse;
 import com.sadbob.CalendarConverter.exception.ConversionException;
 import com.sadbob.CalendarConverter.exception.ValidationException;
 import com.sadbob.CalendarConverter.enums.CalendarType;

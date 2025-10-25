@@ -1,8 +1,8 @@
 package com.sadbob.CalendarConverter.controller;
 
-import com.sadbob.CalendarConverter.dto.requestDTO.BulkConversionRequest;
-import com.sadbob.CalendarConverter.dto.requestDTO.DateRangeRequest;
-import com.sadbob.CalendarConverter.dto.responseDTO.BulkConversionResponse;
+import com.sadbob.CalendarConverter.dto.requestDTO.conversion.BulkConversionRequest;
+import com.sadbob.CalendarConverter.dto.requestDTO.conversion.DateRangeRequest;
+import com.sadbob.CalendarConverter.dto.responseDTO.conversion.BulkConversionResponse;
 import com.sadbob.CalendarConverter.service.BulkConversionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,9 +1,9 @@
 package com.sadbob.CalendarConverter.controller;
 
 import com.sadbob.CalendarConverter.dto.requestDTO.export.ExportRequest;
-import com.sadbob.CalendarConverter.service.calenderExport.DataExportService;
-import com.sadbob.CalendarConverter.service.calenderExport.ICalExportService;
-import com.sadbob.CalendarConverter.service.calenderExport.PdfExportService;
+import com.sadbob.CalendarConverter.service.impl.DataExportServiceImpl;
+import com.sadbob.CalendarConverter.service.ICalExportService;
+import com.sadbob.CalendarConverter.service.PdfExportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +19,10 @@ public class ExportController {
 
     private final ICalExportService icalExportService;
     private final PdfExportService pdfExportService;
-    private final DataExportService dataExportService;
+    private final DataExportServiceImpl dataExportService;
 
 
-    public ExportController(ICalExportService icalExportService, PdfExportService pdfExportService, DataExportService dataExportService) {
+    public ExportController(ICalExportService icalExportService, PdfExportService pdfExportService, DataExportServiceImpl dataExportService) {
         this.icalExportService = icalExportService;
         this.pdfExportService = pdfExportService;
         this.dataExportService = dataExportService;

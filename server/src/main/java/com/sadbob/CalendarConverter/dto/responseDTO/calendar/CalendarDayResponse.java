@@ -1,4 +1,4 @@
-package com.sadbob.CalendarConverter.dto.responseDTO;
+package com.sadbob.CalendarConverter.dto.responseDTO.calendar;
 
 public class CalendarDayResponse {
     private int day;

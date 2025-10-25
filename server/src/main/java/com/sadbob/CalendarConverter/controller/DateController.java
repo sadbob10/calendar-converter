@@ -1,10 +1,10 @@
 package com.sadbob.CalendarConverter.controller;
 
-import com.sadbob.CalendarConverter.dto.requestDTO.AgeCalculationRequest;
-import com.sadbob.CalendarConverter.dto.requestDTO.DateConversionRequest;
-import com.sadbob.CalendarConverter.dto.responseDTO.AgeResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.ConversionResponse;
-import com.sadbob.CalendarConverter.dto.responseDTO.TodayResponse;
+import com.sadbob.CalendarConverter.dto.requestDTO.age.AgeCalculationRequest;
+import com.sadbob.CalendarConverter.dto.requestDTO.conversion.DateConversionRequest;
+import com.sadbob.CalendarConverter.dto.responseDTO.age.AgeResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.conversion.ConversionResponse;
+import com.sadbob.CalendarConverter.dto.responseDTO.calendar.TodayResponse;
 import com.sadbob.CalendarConverter.service.AgeCalculationService;
 import com.sadbob.CalendarConverter.service.DateConversionService;
 import com.sadbob.CalendarConverter.service.TodayService;
