@@ -9,6 +9,8 @@
 
 # Maven
 target/
+!server/src/main/**/target/
+!server/src/test/**/target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -24,26 +26,29 @@ logs/
 
 # ==================== FRONTEND (React) ====================
 # Dependencies
-client/node_modules/
-client/.pnpm-debug.log*
+node_modules/
+.pnpm-debug.log*
 
 # Production builds
-client/dist/
-client/build/
+dist/
+build/
 
 # Environment variables
-client/.env
-client/.env.local
-client/.env.development.local
-client/.env.test.local
-client/.env.production.local
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Cache
-client/.eslintcache
-client/.parcel-cache/
+.eslintcache
+.parcel-cache/
 
 # Runtime data
-client/.pnp.*
+.pnp.*
+
+# Vite
+*.local
 
 # ==================== IDE ====================
 # IntelliJ IDEA
@@ -90,6 +95,4 @@ Desktop.ini
 !server/mvnw
 !server/mvnw.cmd
 !server/.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 HELP.md
