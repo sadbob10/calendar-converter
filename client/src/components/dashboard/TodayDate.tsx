@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { dateApi } from '@/services/api';
-import { TodayResponse } from '@/types/calendar';
+import type { TodayResponse } from '@/types/calendar';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 export const TodayDate: React.FC = () => {
