@@ -22,6 +22,8 @@ interface ConversionState {
     // Reset states
     resetConversion: () => void;
     resetBulkConversion: () => void;
+
+    resetAll: () => void;
 }
 
 export const useConversionStore = create<ConversionState>((set) => ({
@@ -72,6 +74,15 @@ export const useConversionStore = create<ConversionState>((set) => ({
 
     resetBulkConversion: () => set({
         bulkResults: null,
+        bulkError: null
+    }),
+
+    resetAll: () => set({
+        conversionResult: null,
+        isConverting: false,
+        conversionError: null,
+        bulkResults: null,
+        isBulkConverting: false,
         bulkError: null
     })
 }));
