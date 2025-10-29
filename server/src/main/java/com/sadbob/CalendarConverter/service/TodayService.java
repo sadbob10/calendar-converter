@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
@@ -37,17 +38,15 @@ public class TodayService {
         String hijriDateStr = String.format("%d-%02d-%02d", hijriDate.year(), hijriDate.month(), hijriDate.day());
         String hijriFormatted = formatHijriDate(hijriDate, today.getDayOfWeek().getValue());
 
-        Map<String, String> todayDates = Map.of(
-                "gregorian", gregorianDate,
-                "ethiopian", ethiopianDate,
-                "hijri", hijriDateStr
-        );
+        Map<String, String> todayDates = new LinkedHashMap<>();
+        todayDates.put("gregorian", gregorianDate);
+        todayDates.put("ethiopian", ethiopianDate);
+        todayDates.put("hijri", hijriDateStr);
 
-        Map<String, String> formattedDates = Map.of(
-                "gregorian", gregorianFormatted,
-                "ethiopian", ethiopianFormatted,
-                "hijri", hijriFormatted
-        );
+        Map<String, String> formattedDates = new LinkedHashMap<>();
+        formattedDates.put("gregorian", gregorianFormatted);
+        formattedDates.put("ethiopian", ethiopianFormatted);
+        formattedDates.put("hijri", hijriFormatted);
 
         return new TodayResponse(todayDates, formattedDates);
     }

@@ -35,20 +35,39 @@ export const DateConverter: React.FC = () => {
 
     const clearAll = () => {
         setSelectedDate('');
-        // Use the new reset action
         const { resetAll } = useConversionStore.getState();
         resetAll();
     };
+
+    // Debug: Log the conversion result to see the actual structure
+    React.useEffect(() => {
+        if (conversionResult) {
+            console.log('Conversion Result:', conversionResult);
+            console.log('Target Calendar:', targetCalendar);
+            console.log('Conversions object:', conversionResult.conversions);
+            console.log('Ethiopian conversion:', conversionResult.conversions?.ethiopian);
+        }
+    }, [conversionResult, targetCalendar]);
 
     // Safe data access for conversion results
     const getConversionResult = () => {
         if (!conversionResult) return null;
 
+        console.log('Accessing conversion for:', targetCalendar);
+        console.log('Available conversions:', conversionResult.conversions);
+
         // Get the converted date from the conversions object
-        const convertedDate = conversionResult.conversions?.[targetCalendar] || 'Conversion not available';
+        // Use lowercase keys since the API returns lowercase
+        const convertedDate = conversionResult.conversions?.[targetCalendar.toLowerCase()] ||
+            conversionResult.conversions?.[targetCalendar] ||
+            'Conversion not available';
+
+        console.log('Converted date result:', convertedDate);
 
         // Get formatted date from the formattedDates object
-        const formattedDate = conversionResult.formattedDates?.[targetCalendar] || '';
+        const formattedDate = conversionResult.formattedDates?.[targetCalendar.toLowerCase()] ||
+            conversionResult.formattedDates?.[targetCalendar] ||
+            '';
 
         return {
             convertedDate,
