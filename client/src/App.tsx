@@ -1,18 +1,16 @@
+import { Routes, Route } from 'react-router-dom';
 import { Layout } from '@/components/common/Layout';
-import { DateConverter } from '@/components/conversion/DateConverter';
+import { Home, CalendarView, AgeCalculator, BulkConverter } from '@/pages';
 
 function App() {
     return (
         <Layout>
-            <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold text-gray-800 mb-2">
-                    Calendar Converter
-                </h1>
-                <p className="text-gray-600">
-                    Convert dates between Gregorian, Ethiopian, and Hijri calendars
-                </p>
-            </div>
-            <DateConverter />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/calendar" element={<CalendarView />} />
+                <Route path="/age" element={<AgeCalculator />} />
+                <Route path="/bulk" element={<BulkConverter />} />
+            </Routes>
         </Layout>
     );
 }
