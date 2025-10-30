@@ -39,9 +39,9 @@ export const QuickActions: React.FC = () => {
             title: 'Holiday Check',
             description: 'Check holidays for any date',
             icon: '🎉',
-            path: '#',
+            path: '/holidays', // Change from '#' to '/holidays'
             color: 'bg-red-500 hover:bg-red-600',
-            soon: true
+            soon: false // Change from true to false
         },
         {
             title: 'Export Calendar',

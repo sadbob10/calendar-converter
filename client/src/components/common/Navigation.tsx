@@ -11,6 +11,7 @@ export const Navigation: React.FC = () => {
         { path: '/calendar', label: 'Calendar', icon: '📅' },
         { path: '/age', label: 'Age Calculator', icon: '🎂' },
         { path: '/bulk', label: 'Bulk Convert', icon: '📊' },
+        { path: '/holidays', label: 'Holidays', icon: '🎉' },
     ];
 
     return (
