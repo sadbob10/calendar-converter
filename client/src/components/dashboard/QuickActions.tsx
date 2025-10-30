@@ -54,22 +54,22 @@ export const QuickActions: React.FC = () => {
     ];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
             {actions.map((action, index) => (
                 <Link
                     key={index}
                     to={action.path}
-                    className={`block transform transition-all duration-200 hover:scale-105 ${
+                    className={`block transform transition-all duration-200 hover:scale-105 focus:scale-105 ${
                         action.soon ? 'opacity-60 cursor-not-allowed' : ''
                     }`}
                 >
-                    <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow">
-                        <div className="flex items-start space-x-4">
-                            <div className={`text-2xl p-3 rounded-lg ${action.color} text-white`}>
+                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 md:p-6 border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow h-full">
+                        <div className="flex items-start space-x-3 md:space-x-4">
+                            <div className={`text-xl md:text-2xl p-2 md:p-3 rounded-lg ${action.color} text-white flex-shrink-0`}>
                                 {action.icon}
                             </div>
-                            <div className="flex-1">
-                                <h3 className="font-semibold text-lg text-gray-800 mb-1">
+                            <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-base md:text-lg text-gray-800 dark:text-white mb-1 truncate">
                                     {action.title}
                                     {action.soon && (
                                         <span className="ml-2 text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
@@ -77,7 +77,9 @@ export const QuickActions: React.FC = () => {
                     </span>
                                     )}
                                 </h3>
-                                <p className="text-gray-600 text-sm">{action.description}</p>
+                                <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
+                                    {action.description}
+                                </p>
                             </div>
                         </div>
                     </div>
