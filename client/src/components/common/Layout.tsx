@@ -3,7 +3,6 @@ import { useUIStore } from '@/stores';
 import { Navigation } from './Navigation';
 import { MobileMenu } from './MobileMenu';
 import { ThemeSwitch } from './ThemeSwitch';
-import { ResponsiveContainer } from './ResponsiveContainer';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -35,42 +34,56 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 ? 'bg-gray-900 text-white'
                 : 'bg-gray-50 text-gray-900'
         }`}>
-            {/* Header */}
-            <header className={`sticky top-0 z-50 border-b backdrop-blur-sm ${
+            {/* Beautiful Header */}
+            <header className={`sticky top-0 z-50 border-b backdrop-blur-lg ${
                 theme === 'dark'
-                    ? 'bg-gray-800/95 border-gray-700'
-                    : 'bg-white/95 border-gray-200'
+                    ? 'bg-gray-900/80 border-gray-700'
+                    : 'bg-white/80 border-gray-200'
             }`}>
-                <ResponsiveContainer>
-                    <div className="flex justify-between items-center py-3 md:py-4">
-                        {/* Logo */}
-                        <div className="flex items-center flex-shrink-0">
-                            <a href="/" className="flex items-center">
-                                <div className="text-2xl mr-2 md:mr-3">🗓️</div>
-                                <h1 className={`text-lg md:text-xl font-bold ${
-                                    theme === 'dark' ? 'text-white' : 'text-gray-800'
-                                }`}>
-                                    Calendar Converter
-                                </h1>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center h-16">
+
+                        {/* Logo Section - Left */}
+                        <div className="flex items-center">
+                            <a href="/" className="flex items-center space-x-3 group">
+                                <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg">
+                                    <span className="text-xl text-white">🗓️</span>
+                                </div>
+                                <div className="flex flex-col">
+                                    <h1 className={`text-xl font-bold tracking-tight ${
+                                        theme === 'dark' ? 'text-white' : 'text-gray-800'
+                                    }`}>
+                                        Calendar Converter
+                                    </h1>
+                                    <p className={`text-xs ${
+                                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                                    }`}>
+                                        Multi-calendar tool
+                                    </p>
+                                </div>
                             </a>
                         </div>
 
-                        {/* Desktop Navigation & Theme Toggle */}
-                        <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+                        {/* Desktop Navigation & Controls - Center */}
+                        <div className="hidden lg:flex items-center space-x-8">
                             <Navigation />
+                        </div>
+
+                        {/* Desktop Controls - Right */}
+                        <div className="hidden lg:flex items-center space-x-4">
                             <div className="w-px h-6 bg-gray-300 dark:bg-gray-600"></div>
                             <ThemeSwitch />
                         </div>
 
-                        {/* Mobile menu button and theme toggle */}
-                        <div className="flex items-center space-x-2 md:hidden">
+                        {/* Mobile Controls - Right */}
+                        <div className="flex lg:hidden items-center space-x-3">
                             <ThemeSwitch />
                             <button
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className={`p-2 rounded-md ${
+                                className={`p-2 rounded-lg transition-all ${
                                     theme === 'dark'
-                                        ? 'text-gray-400 hover:text-white hover:bg-gray-700'
-                                        : 'text-gray-400 hover:text-gray-500 hover:bg-gray-100'
+                                        ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                                 }`}
                                 aria-label="Toggle menu"
                             >
@@ -80,19 +93,15 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                             </button>
                         </div>
                     </div>
-                </ResponsiveContainer>
+                </div>
             </header>
 
             {/* Mobile Menu */}
             <MobileMenu isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
             {/* Main Content */}
-            <main className="flex-1">
-                <ResponsiveContainer>
-                    <div className="py-4 md:py-6 lg:py-8">
-                        {children}
-                    </div>
-                </ResponsiveContainer>
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {children}
             </main>
 
             {/* Footer */}
@@ -101,15 +110,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     ? 'bg-gray-800 border-gray-700'
                     : 'bg-white border-gray-200'
             }`}>
-                <ResponsiveContainer>
-                    <div className="py-6 md:py-8">
-                        <div className={`text-center text-xs md:text-sm ${
-                            theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
-                            <p>© 2024 Calendar Converter. Convert between Gregorian, Ethiopian, and Hijri calendars.</p>
-                        </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div className={`text-center text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                        <p>© 2024 Calendar Converter. Convert between Gregorian, Ethiopian, and Hijri calendars.</p>
                     </div>
-                </ResponsiveContainer>
+                </div>
             </footer>
         </div>
     );
