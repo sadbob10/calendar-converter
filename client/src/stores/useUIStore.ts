@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface UIState {
     // Theme and appearance
@@ -14,29 +15,40 @@ interface UIState {
 
     // Actions
     toggleTheme: () => void;
+    setTheme: (theme: 'light' | 'dark') => void;
     setSidebarOpen: (open: boolean) => void;
     showNotification: (message: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
     hideNotification: () => void;
 }
 
-export const useUIStore = create<UIState>((set) => ({
-    // Initial state
-    theme: 'light',
-    sidebarOpen: false,
-    notification: null,
+export const useUIStore = create<UIState>()(
+    persist(
+        (set) => ({ // Remove the unused 'get' parameter
+            // Initial state
+            theme: 'light',
+            sidebarOpen: false,
+            notification: null,
 
-    // Actions
-    toggleTheme: () => set((state) => ({
-        theme: state.theme === 'light' ? 'dark' : 'light'
-    })),
+            // Actions
+            toggleTheme: () => set((state) => ({
+                theme: state.theme === 'light' ? 'dark' : 'light'
+            })),
 
-    setSidebarOpen: (open) => set({ sidebarOpen: open }),
+            setTheme: (theme) => set({ theme }),
 
-    showNotification: (message, type = 'info') => set({
-        notification: { message, type, visible: true }
-    }),
+            setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
-    hideNotification: () => set({
-        notification: null
-    })
-}));
+            showNotification: (message, type = 'info') => set({
+                notification: { message, type, visible: true }
+            }),
+
+            hideNotification: () => set({
+                notification: null
+            })
+        }),
+        {
+            name: 'ui-storage', // name of the item in the storage (must be unique)
+            partialize: (state) => ({ theme: state.theme }), // only persist theme
+        }
+    )
+);
