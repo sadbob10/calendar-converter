@@ -3,3 +3,4 @@ export { CalendarView } from './CalendarView';
 export { AgeCalculator } from './AgeCalculator';
 export { BulkConverter } from './BulkConverter';
 export { Holidays } from './Holidays';
+export { Export } from './Export';

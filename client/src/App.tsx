@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { Layout } from '@/components/common/Layout';
-import { Home, CalendarView, AgeCalculator, BulkConverter } from '@/pages';
-import {Holidays} from "./pages";
+import {Home, CalendarView, AgeCalculator, BulkConverter, Export, Holidays} from "./pages";
 
 function App() {
     return (
@@ -12,6 +11,7 @@ function App() {
                 <Route path="/age" element={<AgeCalculator />} />
                 <Route path="/bulk" element={<BulkConverter />} />
                 <Route path="/holidays" element={<Holidays />} />
+                <Route path="/export" element={<Export />} /> {/* Add this line */}
             </Routes>
         </Layout>
     );

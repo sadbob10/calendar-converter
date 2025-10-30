@@ -39,17 +39,17 @@ export const QuickActions: React.FC = () => {
             title: 'Holiday Check',
             description: 'Check holidays for any date',
             icon: '🎉',
-            path: '/holidays', // Change from '#' to '/holidays'
+            path: '/holidays',
             color: 'bg-red-500 hover:bg-red-600',
-            soon: false // Change from true to false
+            soon: false
         },
         {
             title: 'Export Calendar',
             description: 'Download calendars as PDF or ICS',
             icon: '📥',
-            path: '#',
+            path: '/export',
             color: 'bg-indigo-500 hover:bg-indigo-600',
-            soon: true
+            soon: false
         }
     ];
 
